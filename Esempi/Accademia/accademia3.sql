@@ -124,7 +124,9 @@ insert into Assenza(id, persona, tipo, giorno) values
 (542, 153936, 'Chiusura Universitaria', '18/03/2025'),
 (84, 389167, 'Malattia', '17/11/2024'),
 (863, 988801, 'Maternita', '19/06/2024'),
-(936, 982878, 'Chiusura Universitaria', '16/09/2024');
+(936, 982878, 'Chiusura Universitaria', '16/09/2024')
+(7, 931031, 'Malattia', '15/11/2024'),
+(8, 153936, 'Maternita', '14/03/2024');
 
 insert into AttivitaProgetto(id, persona, progetto, wp, giorno, tipo, oreDurata) values 
 (162, 540413, 47889, 5, '18/06/2025', 'Ricerca e Sviluppo', 8),
