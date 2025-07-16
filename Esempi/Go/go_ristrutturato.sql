@@ -2,25 +2,20 @@ begin transaction;
 
 set constraints all deferred;
 
-create domain Stringa as varchar;
+create domain Stringa as varchar(100);
 
-create domain IntGEZ as integer
-    check (value >= 0);
+create domain IntGEZ as integer check (value >= 0);
 
-create domain IntGZ as integer
-    check (value > 0);
+create domain IntGZ as integer check (value > 0);
 
-create domain Real_0_10 as real
-    check (value >= 0 and value <= 10);
+create domain Real_0_10 as real check (value >= 0 and value <= 10);
 
-create type colore as ENUM 
-('Bianco', 'Nero');
+create type colore as ENUM ('Bianco', 'Nero');
 
-create type indirizzo as (
+create type Indirizzo as (
     via Stringa, 
     civico Stringa
 );
-
 
 
 
@@ -32,8 +27,8 @@ create table regione (
     nome Stringa not null,
     -- accorpa reg_naz
     nazione Stringa not null, 
-    foreign key(nazione) references nazione(nome),
-    primary key(nome, nazione)
+    primary key(nome, nazione),
+    foreign key(nazione) references nazione(nome)
 );
 
 create table citta (
@@ -41,7 +36,7 @@ create table citta (
     nome Stringa not null,
     regione Stringa not null,
     nazione Stringa not null,
-    foreign key (regione, nazione) references regione(nome, nazione)
+    foreign key (regione, nazione) references regione(nome, nazione),
     unique (nome, regione, nazione)
 );
 
@@ -85,10 +80,8 @@ create table nero (
     partita integer not null,
     giocatore Stringa not null,
     primary key (partita), -- perché può avere un solo giocatore nero!
-    foreign key (giocatore)
-        references giocatore(nickname)
-    foreign key (partita)
-        references partita(id) deferrable
+    foreign key (giocatore) references giocatore(nickname),
+    foreign key (partita) references partita(id) deferrable
 );
 
 alter table partita
@@ -126,3 +119,96 @@ set constraints all deferred;
 insert into partita(...)
 insert into nero (...)
 commit; -- solo adesso vengono effettivamente valutati i vincoli
+
+
+
+
+
+
+
+
+
+create domain Stringa as varchar(100);
+
+create domain IntGZ as integer check (value > 0);
+
+create domain Real_0_10 as real check (value >= 0 and value <= 10);
+
+create domain InGEZ as integer check (value >= 0);
+
+create domain IntGZ_1900 as integer check (value > 1900);
+
+create domain CAP as integer check (value == 5);
+
+create type Colore as enum ('Bianco', 'Nero');
+
+create type Regole as enum ('Cinesi', 'Giapponesi');
+
+create type Indirizzo as (
+    via Stringa
+    civico Stringa    
+    cap CAP
+);
+
+
+create table Nazione (
+    nome Stringa primary key
+);
+
+create table Regione (
+    nome Stringa not null,
+    nazione Stringa not null,
+    primary key (nome, nazione),
+    foreign key (nazione) references Nazione(nome)
+);
+
+create table Citta (
+    id integer not null,
+    nome Stringa not null,
+    regione Stringa not null,
+    primary key (id), 
+    foreign key (regione, nazione) references Regione(nome, nazione),
+    unique (nome, regione, nazione)
+);
+
+create table Giocatore (
+    nickname Stringa not null,
+    nome Stringa not null,
+    cognome Stringa not null,
+    indirizzo Indirizzo not null,
+    rank_dichiarato IntGZ not null,
+    citta integer not null,
+    primary key (nickname),
+    foreign key citta references Citta(id)
+);
+
+create table Partita (
+    id integer not null,
+    data_partita timestamp not null,
+    indirizzo Indirizzo not null,
+    komi Real_0_10 not null,
+    regole Regole not null,
+    primary key (id),
+    foreign key (regole) references Regole(nome)
+);
+
+create table Regole (
+    nome Regole primary key
+);
+
+create table Torneo (
+    id integer not null,
+    nome Stringa not null,
+    descrizione Stringa not null,
+    edizione IntGZ_1900 not null,
+    primary key (id)
+);
+
+create table partita_torneo (
+    partita integer not null,
+    torneo integer not null,
+    primary key (partita),
+    foreign key (partita) references Partita(id),
+    foreign key (torneo) references Tonero(id)
+);
+
