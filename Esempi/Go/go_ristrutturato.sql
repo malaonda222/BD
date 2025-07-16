@@ -29,7 +29,7 @@ create table nazione (
 );
 
 create table regione (
-    nome Stringa not null 
+    nome Stringa not null,
     -- accorpa reg_naz
     nazione Stringa not null, 
     foreign key(nazione) references nazione(nome),
@@ -38,7 +38,7 @@ create table regione (
 
 create table citta (
     id integer primary key,
-    nome Stringa not null
+    nome Stringa not null,
     regione Stringa not null,
     nazione Stringa not null,
     foreign key (regione, nazione) references regione(nome, nazione)
@@ -72,12 +72,10 @@ create table partita (
 
     -- accorpa bianco 
     bianco Stringa not null,
-    foreign key (bianco)
-        references giocatore(nickname)
+    foreign key (bianco) references giocatore(nickname),
 
     torneo integer, 
-    foreign key (torneo)
-        references torneo(id)
+    foreign key (torneo) references torneo(id)
 
     -- posticipiano la definizione della foreign key verso nero
     -- perché questa ancora non esiste 
