@@ -99,15 +99,15 @@ insert into regole(nome) values
 
 create table PartitaConRinuncia (
     partita integer primary key,
-    foreign key (partita) references partita(id),
-    rinunciatario colore not null
+    rinunciatario colore not null,
+    foreign key (partita) references partita(id)
 );
 
 create table PartitaConPunteggio (
+    punteggio_bianco IntGEZ not null,
+    punteggio_nero IntGEZ not null,
     partita integer primary key,
     foreign key (partita) references partita(id),
-    punteggio_bianco IntGEZ not null,
-    punteggio_nero IntGEZ not null
 );
 
 
@@ -125,7 +125,9 @@ commit; -- solo adesso vengono effettivamente valutati i vincoli
 
 
 
+begin transaction;
 
+set constraints all deferred;
 
 
 create domain Stringa as varchar(100);
@@ -138,15 +140,15 @@ create domain InGEZ as integer check (value >= 0);
 
 create domain IntGZ_1900 as integer check (value > 1900);
 
-create domain CAP as integer check (value == 5);
+create domain CAP char(5) check (value ~ '^[0-9]{5}$');
 
 create type Colore as enum ('Bianco', 'Nero');
 
 create type Regole as enum ('Cinesi', 'Giapponesi');
 
 create type Indirizzo as (
-    via Stringa
-    civico Stringa    
+    via Stringa,
+    civico Stringa,    
     cap CAP
 );
 
@@ -166,6 +168,7 @@ create table Citta (
     id integer not null,
     nome Stringa not null,
     regione Stringa not null,
+    nazione Stringa not null,
     primary key (id), 
     foreign key (regione, nazione) references Regione(nome, nazione),
     unique (nome, regione, nazione)
@@ -188,12 +191,11 @@ create table Partita (
     indirizzo Indirizzo not null,
     komi Real_0_10 not null,
     regole Regole not null,
+    nero Stringa not null,
+    bianco Stringa not null,
     primary key (id),
-    foreign key (regole) references Regole(nome)
-);
-
-create table Regole (
-    nome Regole primary key
+    foreign key (nero) references Giocatore(nickname),
+    foreign key (bianco) references Giocatore(nickname)
 );
 
 create table Torneo (
@@ -209,6 +211,23 @@ create table partita_torneo (
     torneo integer not null,
     primary key (partita),
     foreign key (partita) references Partita(id),
-    foreign key (torneo) references Tonero(id)
+    foreign key (torneo) references Torneo(id)
 );
 
+create table PartitaConRinuncia (
+    partita integer not null,
+    rinunciatario Colore not null,
+    primary key (partita), 
+    foreign key (partita) references Partita(id)
+);
+
+create table PartitaConPunteggio (
+    partita integer not null,
+    punteggio_bianco IntGEZ not null, 
+    punteggio_nero IntGEZ not null,
+    primary key (partita),
+    foreign key (partita) references Partita(id)
+);
+
+
+commit;
