@@ -50,7 +50,6 @@ create table Volo (
     foreign key (compagnia_aerea) references CompagniaAerea(id),
     foreign key (partenza) references Aeroporto(id), 
     foreign key (arrivo) references Aeroporto(id)
-    -- v.inclusione Volo(id) occorre in partenza(volo)
 );
 
 -- create table partenza (
