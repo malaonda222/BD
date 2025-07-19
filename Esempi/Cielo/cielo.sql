@@ -1,7 +1,5 @@
 begin transaction;
 
-set constraints all deferred;
-
 create domain PosInteger as integer check (value >= 0);
 
 create domain StringaM as varchar(100);
@@ -26,11 +24,12 @@ create table LuogoAeroporto (
     citta StringaM not null,
     nazione StringaM not null,
     primary key (aeroporto),
-    foreign key (aeroporto) references Aeroporto(codice) deferrable initially deferred
+    foreign key (aeroporto) references Aeroporto(codice) deferrable
 );
 
 alter table Aeroporto
-add foreign key (codice) references LuogoAeroporto(aeroporto) deferrable initially deferred;
+add foreign key (codice) references LuogoAeroporto(aeroporto) deferrable;
+
 
 create table ArrPart (
     codice PosInteger not null,
@@ -38,8 +37,8 @@ create table ArrPart (
     arrivo CodIATA not null,
     partenza CodIATA not null,
     primary key (codice, comp),
-    foreign key (arrivo) references Aeroporto(codice),
-    foreign key (partenza) references Aeroporto(codice)
+    foreign key (arrivo) references Aeroporto(codice) deferrable,
+    foreign key (partenza) references Aeroporto(codice) deferrable
 );
 
 create table Volo (
@@ -53,6 +52,6 @@ create table Volo (
 
 
 alter table ArrPart add 
-foreign key (codice, comp) references Volo(codice, comp) deferrable initially deferred;
+foreign key (codice, comp) references Volo(codice, comp) deferrable;
 
 commit;
