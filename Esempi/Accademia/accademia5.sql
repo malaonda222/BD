@@ -17,8 +17,8 @@ where pr.nome = 'Pegasus'
 order by p.cognome desc
 
 
-/*3. Quali sono il nome, il cognome e la posizione degli strutturati che hanno più di
--- una attività nel progetto ‘Pegasus’?*/
+/*3. Quali sono il nome, il cognome e la posizione degli strutturati che hanno più di 
+una attività nel progetto ‘Pegasus’?*/
 select p.nome, p.cognome, p.posizione
 from persona p
 join attivitaprogetto ap on p.id = ap.persona
