@@ -59,20 +59,25 @@ where ar.comp = 'MagicFly'
 
 /*9. Quali sono i voli che partono da un qualunque aeroporto della città di ‘Roma’ e 
 atterrano ad un qualunque aeroporto della città di ‘New York’? 
-Restituire: codice del volo, nome della compagnia, e aeroporti di partenza e arrivo.
-select ar.codice, ar.comp, ar.partenza, ar.arrivo*/
+Restituire: codice del volo, nome della compagnia, e aeroporti di partenza e arrivo.*/
+select ar.codice, ar.comp, ar.partenza, ar.arrivo
 from arrpart ar
     join luogoaeroporto l1 on ar.partenza = l1.aeroporto
     join luogoaeroporto l2 on ar.arrivo = l2.aeroporto
 where l1.citta = 'Roma' and l2.citta = 'New York'
 
 
-/*10. Quali sono i possibili piani di volo con esattamente un cambio (utilizzando 
-solo voli della stessa compagnia) da un qualunque aeroporto della città di ‘Roma’ ad un 
-qualunque aeroporto della città di ‘New York’? 
-Restituire: nome della compagnia, codici dei voli e aeroporti di partenza, scalo e
-arrivo.*/
--- ????
+/*10. Quali sono i possibili piani di volo con esattamente un cambio (utilizzando solo voli della stessa compagnia) da un qualunque aeroporto della città di ‘Roma’ ad un qualunque aeroporto della città di ‘New York’? 
+Restituire: nome della compagnia, codici dei voli e aeroporti di partenza, scalo e arrivo.*/
+select ar1.comp, ar1.codice, l1.aeroporto, l2.aeroporto, l3.aeroporto
+from arrpart ar1
+	join luogoaeroporto l1 on ar1.partenza = l1.aeroporto
+	join luogoaeroporto l2 on ar1.arrivo = l2.aeroporto
+    join arrpart ar2 on ar1.arrivo = ar2.partenza
+	join luogoaeroporto l3 on ar2.arrivo = l3.aeroporto
+where l1.citta = 'Roma' and l3.citta = 'New York'
+	and l1.citta <> l3.citta
+	and ar1.comp = ar2.comp
 
 
 /*11. Quali sono le compagnie che hanno voli che partono dall’aeroporto ‘FCO’, atterrano 
