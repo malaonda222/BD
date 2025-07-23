@@ -5,7 +5,7 @@ nome ‘Pegasus’?*/
 select wp.nome, wp.inizio, wp.fine
 from progetto, wp
 where progetto.nome = 'Pegasus'
-and wp.progetto = p.id
+and wp.progetto = progetto.id
 
 
 /*2. Quali sono il nome, il cognome e la posizione degli strutturati che hanno almeno una 
