@@ -25,7 +25,7 @@ from arrpart
 where arrivo = 'FCO'
 
 
-/*5. Quali sono i voli (codice e nome della compagnia) che partono dall’aeroporto ‘FCO’ e  arrivano all’aeropor ‘JFK’?*/
+/*5. Quali sono i voli (codice e nome della compagnia) che partono dall’aeroporto ‘FCO’ e  arrivano all’aeroporto ‘JFK’?*/
 select codice, comp
 from arrpart 
 where partenza = 'FCO' and arrivo = 'JFK'
