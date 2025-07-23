@@ -2,10 +2,16 @@
 
 /*1. Quali sono il nome, la data di inizio e la data di fine dei WP del progetto di
 nome ‘Pegasus’?*/
-select wp.nome, wp.inizio, wp.fine
+select wp.id, wp.nome, wp.inizio, wp.fine
 from progetto, wp
 where progetto.nome = 'Pegasus'
 and wp.progetto = progetto.id
+
+-- oppure 
+select wp.nome, wp.inizio, wp.fine 
+from wp, progetto 
+where wp.progetto = p.id 
+and p.nome = 'Pegasus'
 
 
 /*2. Quali sono il nome, il cognome e la posizione degli strutturati che hanno almeno una 
@@ -17,6 +23,14 @@ join progetto pr on ap.progetto = pr.id
 where pr.nome = 'Pegasus'
 order by p.cognome desc
 
+-- oppure 
+select distinct p.id, p.nome, p.cognome, p.posizione
+from attivitaprogetto ap, progetto pr, persona p 
+where ap.progetto = pr.id 
+    and ap.persona = p.id 
+    and pr.nome = 'Pegasus'
+order by p.cognome desc 
+
 
 /*3. Quali sono il nome, il cognome e la posizione degli strutturati che hanno più di 
 una attività nel progetto ‘Pegasus’?*/
@@ -27,6 +41,14 @@ join progetto pr on ap.progetto = pr.id
 where pr.nome = 'Pegasus'
 group by p.id, p.nome, p.cognome, p.posizione
 having count (p.nome) > 1
+
+--oppure 
+select distinct p.nome, p.cognome, p.posizione
+from persona p, attivitaprogetto ap1, attivitaprogetto ap2, progetto prog 
+where prog.nome = 'Pegasus'
+	and p.id = ap1.persona
+	and p.id = ap2.persona
+	and ap1.id <> ap2.id
 
 
 /*4. Quali sono il nome, il cognome e la posizione dei Professori Ordinari che hanno 
@@ -58,6 +80,7 @@ where anp.tipo = 'Didattica' and p.posizione = 'Ricercatore'
 group by p.nome, p.cognome, p.posizione
 having count (anp.tipo) >= 1
 
+
 /*7. Quali sono il nome, il cognome e la posizione dei Ricercatori che hanno più di un
 impegno per didattica?*/
 select distinct p.nome, p.cognome, p.posizione 
@@ -70,11 +93,18 @@ having count (anp.tipo) > 1
 
 /*8. Quali sono il nome e il cognome degli strutturati che nello stesso giorno hanno sia
 attività progettuali che attività non progettuali?*/
-select p.nome, p.cognome
+select distinct p.nome, p.cognome
 from persona p
 join attivitanonprogettuale anp on p.id = anp.persona
 join attivitaprogetto ap on p.id = ap.persona 
 where anp.giorno = ap.giorno
+
+-- oppure 
+select distinct p.nome, p.cognome
+from persona p, attivitaprogetto ap, attivitanonprogettuale anp
+where p.id = ap.persona
+    and p.id = anp.persona 
+    and ap.giorno = anp.giorno 
 
 
 /*9. Quali sono il nome e il cognome degli strutturati che nello stesso giorno hanno sia
