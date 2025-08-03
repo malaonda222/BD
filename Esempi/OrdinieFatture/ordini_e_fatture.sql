@@ -29,6 +29,7 @@ create type Indirizzo as (
 create type Stato as enum ('in preparazione', 'inviato', 'da saldare', 'saldato');
 
 
+
 create table Nazione (
     nome StringaM not null,
     primary key (nome) 
