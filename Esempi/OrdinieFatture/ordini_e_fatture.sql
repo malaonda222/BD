@@ -6,7 +6,9 @@ create domain CAP char(5) check (value ~ '^[0-9]{5}$');
 
 create domain StringaM as varchar(100);
 
-create domain CodiceFiscale as varchar(16) check (value ~ '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$');
+create domain StringaM_not_null as varchar(100) check (value not null)
+
+create domain CodiceFiscale as char(16) check (value ~ '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$');
 
 create domain PosInteger as integer check (value >= 0);
 
