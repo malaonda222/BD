@@ -4,9 +4,11 @@ set constraints all deferred;
 
 create domain CAP char(5) check (value ~ '^[0-9]{5}$');
 
+create domain CAP_not_null as varchar(5) check (value is not null);
+
 create domain StringaM as varchar(100);
 
-create domain StringaM_not_null as varchar(100) check (value not null)
+create domain StringaM_not_null as varchar(100) check (value is not null)
 
 create domain CodiceFiscale as char(16) check (value ~ '^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$');
 
@@ -23,9 +25,9 @@ create domain Email as varchar(255) check (value ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0
 create domain Telefono as varchar(15) check (value ~ '^\+?[0-9]{6,15}$');
 
 create type Indirizzo as (
-    via StringaM, 
-    civico StringaM,
-    cap CAP
+    via StringaM_not_null, 
+    civico StringaM_not_null,
+    cap CAP_not_null
 );
 
 create type Stato as enum ('in preparazione', 'inviato', 'da saldare', 'saldato');
