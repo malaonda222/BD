@@ -1,7 +1,5 @@
 begin transaction;
 
-set constraints all deferred;
-
 create domain StringaM as varchar(100);
 create domain Voto as integer check (value between 0 and 5);
 create domain IntGEZ as integer check (value >= 0);
@@ -50,11 +48,11 @@ create table PostOggetto (
     check (commento is null OR ha_feedback = true),
 
     -- v.inclusione: [V.inclusione PostOggetto(id) occorre in pubblica(postoggetto)]
-    foreign key Postoggetto(id) references pubblica(postoggetto),
+    foreign key Postoggetto(id) references pubblica(postoggetto) DEFERRABLE INITIALLY DEFERRED,
     -- v.inclusione: [V.inclusione PostOggetto(id) occorre in met_post(postoggetto)]
 
     -- v.inclusione: [V.inclusione PostOggetto(id) occorre in cat_post(postoggetto)]
-    foreign key Postoggetto(id) references cat_post(postoggetto)
+    foreign key Postoggetto(id) references cat_post(postoggetto) DEFERRABLE INITIALLY DEFERRED
 ); 
 
 create table OggettoUsato (
@@ -70,7 +68,7 @@ create table PostOggettoNuovo (
     anni_garanzia IntG1 not null,
     primary key (postoggetto),
     foreign key (postoggetto) references PostOggetto(id),
-    foreign key (postoggetto) references pubblica_nuovo(postoggettonuovo)
+    foreign key PostOggettoNuovo(postoggetto) references pubblica_nuovo(postoggettonuovo) DEFERRABLE INITIALLY DEFERRED
 );
 
 create table pubblica_nuovo (
@@ -144,9 +142,9 @@ create table Bid (
     primary key (codice),
     unique (istante),
     -- v.inclusione: [V.inclusione Bid(codice) occorre in asta_bid(bid)]
-    foreign key Bid(codice) references asta_bid(bid),
+    foreign key Bid(codice) references asta_bid(bid) DEFERRABLE INITIALLY DEFERRED,
     --v.inclusione: [V.inclusione Bid(codice) occorre in bid_ut(bid)]
-    foreign key Bid(codice) references bid_ut(bid)
+    foreign key Bid(codice) references bid_ut(bid) DEFERRABLE INITIALLY DEFERRED
 );
 
 create table asta_bid (
