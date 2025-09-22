@@ -3,7 +3,7 @@ begin transaction;
 set constraints all deferred;
 
 create domain StringaM as varchar(100);
-create domain Voto as integer (value between 0 and 5);
+create domain Voto as integer check (value between 0 and 5);
 create domain IntGEZ as integer check (value >= 0);
 create domain IntG1 as integer check (value > 1);
 create domain URL as varchar check (value ~ "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$");
@@ -22,17 +22,16 @@ create table Utente (
 create table VenditoreProfessionale (
     utente StringaM not null,
     vetrina URL not null,
-    unique (vetrina)
+    unique (vetrina),
     primary key (utente),
     foreign key (utente) references Utente(username)
 );
 
 create table Privato (
     utente StringaM not null,
-    primary key (utente)
+    primary key (utente),
     foreign key (utente) references Utente(username)
 );
-
 
 create table PostOggetto (
     id serial not null,
@@ -48,16 +47,15 @@ create table PostOggetto (
         =
         voto is not null AND istante_commento is not null
         )
-    check (commento is null OR ha_feedback = true)
+    check (commento is null OR ha_feedback = true),
 
     -- v.inclusione: [V.inclusione PostOggetto(id) occorre in pubblica(postoggetto)]
-    foreign key Postoggetto(id) references pubblica(postoggetto)
+    foreign key Postoggetto(id) references pubblica(postoggetto),
     -- v.inclusione: [V.inclusione PostOggetto(id) occorre in met_post(postoggetto)]
 
     -- v.inclusione: [V.inclusione PostOggetto(id) occorre in cat_post(postoggetto)]
     foreign key Postoggetto(id) references cat_post(postoggetto)
 ); 
-
 
 create table OggettoUsato (
     postoggetto IntGEZ not null, 
@@ -67,7 +65,6 @@ create table OggettoUsato (
     foreign key (postoggetto) references PostOggetto(id)
 );
 
-
 create table PostOggettoNuovo (
     postoggetto IntGEZ not null,
     anni_garanzia IntG1 not null,
@@ -75,7 +72,6 @@ create table PostOggettoNuovo (
     foreign key (postoggetto) references PostOggetto(id),
     foreign key (postoggetto) references pubblica_nuovo(postoggettonuovo)
 );
-
 
 create table pubblica_nuovo (
     postoggettonuovo IntGEZ not null,
@@ -85,7 +81,6 @@ create table pubblica_nuovo (
     foreign key (venditoreprofessionale) references VenditoreProfessionale(utente)
 );
 
-
 create table pubblica (
     utente StringaM not null,
     postoggetto IntGEZ not null,
@@ -94,12 +89,10 @@ create table pubblica (
     foreign key (utente) references Utente(username)
 );
 
-
 create table MetodoDiPagamento (
     nome StringaM not null,
     primary key nome
 )
-
 
 create table met_post ( 
     metodo StringaM not null,
@@ -109,7 +102,6 @@ create table met_post (
     foreign key (postoggetto) references PostOggetto(id)
 );
 
-
 create table Categoria (
     nome StringaM not null, 
     super StringaM, 
@@ -118,7 +110,6 @@ create table Categoria (
 
 alter table add foreign key (super) references Categoria(nome)
 
-
 create table cat_post (
     categoria StringaM not null,
     postoggetto IntGEZ not null,
@@ -126,3 +117,55 @@ create table cat_post (
     foreign key (categoria) references Categoria(nome),
     foreign key (postoggetto) references PostOggetto(id)
 );
+
+create table Asta (
+    postoggetto IntGEZ not null,
+    prezzo_bid RealGZ not null,
+    scadenza timestamp not null,
+    prezzo_base RealGEZ not null,
+    primary key postoggetto,
+    foreign key (postoggetto) references PostOggetto(id)
+);
+
+create table CompraloSubito (
+    postoggetto IntGEZ not null,
+    prezzo RealGZ not null,
+    privato StringaM,
+    acquirente_istante timestamp,  
+    primary key (postoggetto),
+    foreign key (postoggetto) references PostOggetto(id),
+    foreign key (privato) references Privato(utente),
+    check((privato is null)=(acquirente_istante is null))
+);
+
+create table Bid (
+    codice serial not null,
+    istante timestamp not null,
+    primary key (codice),
+    unique (istante),
+    -- v.inclusione: [V.inclusione Bid(codice) occorre in asta_bid(bid)]
+    foreign key Bid(codice) references asta_bid(bid),
+    --v.inclusione: [V.inclusione Bid(codice) occorre in bid_ut(bid)]
+    foreign key Bid(codice) references bid_ut(bid)
+);
+
+create table asta_bid (
+    bid IntGEZ not null,
+    asta IntGEZ not null,
+    primary key (bid),
+    foreign key (bid) references Bid(codice);
+    foreign key (asta) references Asta(postoggetto)
+);
+
+create table bid_ut (
+    bid IntGEZ not null,
+    privato StringaM not null,
+    primary key (bid),
+    foreign key (bid) references Bid(codice),
+    foreign key (privato) references Privato(utente)
+);
+
+commit;
+
+
+
