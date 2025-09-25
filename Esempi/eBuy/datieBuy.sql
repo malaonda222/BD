@@ -27,7 +27,7 @@ VALUES
   (2, 'Samsung Galaxy nuovo', '2025-08-02 13:15:00', false, NULL, NULL, NULL),
   (3, 'Giacca invernale taglia L', '2025-08-03 09:20:00', true, 5, '2025-08-04 10:00:00', 'Perfetta');
  
-INSERT INTO OggettoUsato(postoggetto, condizione, anni_garanzia) VALUES
+INSERT INTO PostOggettoUsato(postoggetto, condizione, anni_garanzia) VALUES
   (1, 'buono', 1),
   (3, 'ottimo', 2);
  
