@@ -1,3 +1,6 @@
+begin transaction;
+
+
 create table categoria (
 	nome stringa primary key,
 	super stringa,
@@ -72,7 +75,7 @@ create table postoggettonuovo (
 		references venditoreprof(utente),
 
 
-	# implementa [V.PostOggettoNuovo.pubblica.isa]
+	--implementa [V.PostOggettoNuovo.pubblica.isa]
 	foreign key (postoggetto, pubblica_nuovo)
 		references postoggetto(id, pubblica) deferrable,
 );
@@ -109,7 +112,7 @@ create table PostOggettoCompraloSubito (
 	istante_acquisto timestamp, 
 	foreign key (postoggetto) references Postoggetto(id),
 	foreign key (acquirente) references Privato(utente),
-	check (acquirente is null) == (istante_acquisto is null)
+	check (acquirente is null) = (istante_acquisto is null)
 	
 );
 
@@ -130,3 +133,6 @@ create table Bid (
 	foreign key (asta) references PostOggettoAsta(postoggetto),
 	unique(istante, asta) --questo implementa {id2}
 );
+
+
+commit;
