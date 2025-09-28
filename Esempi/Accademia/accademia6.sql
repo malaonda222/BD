@@ -59,4 +59,4 @@ select p.id as id_persona, p.nome, p.cognome
 from persona p, attivitaprogetto ap
 where ap.persona = p.id and p.posizione = 'Professore Associato'
 group by p.id
-having count(distinct(ap.progetto) >= 2);
+having count(distinct(ap.progetto) > 1)
