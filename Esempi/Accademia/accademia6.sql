@@ -1,5 +1,5 @@
 /*1. Quanti sono gli strutturati di ogni fascia?*/
-select count(*) as numero
+select posizione, count(*) as numero
 from persona
 group by posizione
 
@@ -42,13 +42,21 @@ from persona p
 group by p.posizione
 
 /*9. Quante ore ‘Ginevra Riva’ ha dedicato ad ogni progetto nel quale ha lavorato?*/
-select ap.progetto, pr.nome, ap.oredurata
+select ap.progetto as id_progetto, pr.nome as progetto, sum(ap.oredurata) as totale_ore
 from persona p, attivitaprogetto ap, progetto pr
 where ap.persona = p.id and p.nome = 'Ginevra' and p.cognome = 'Riva' and ap.progetto = pr.id
 group by ap.progetto, pr.nome, ap.oredurata
 
-
 /*10. Qual è il nome dei progetti su cui lavorano più di due strutturati?*/
-
+select pr.id as progetto_id, pr.nome as progetto
+from attivitaprogetto ap, progetto pr
+where ap.progetto = pr.id
+group by pr.id
+having count(distinct(ap.persona) > 2)
 
 /*11. Quali sono i professori associati che hanno lavorato su più di un progetto?*/
+select p.id as id_persona, p.nome, p.cognome 
+from persona p, attivitaprogetto ap
+where ap.persona = p.id and p.posizione = 'Professore Associato'
+group by p.id
+having count(distinct(ap.progetto) >= 2);
