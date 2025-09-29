@@ -30,23 +30,18 @@ JOIN compagnia c ON c.nome = ap.comp
 GROUP BY a.codice
 
 --6. Quante sono le nazioni (diverse) raggiungibili da ogni nazione tramite uno o più voli?
-select la.nazione, count(distinct(la.nazione)) as raggiungibili
-from aeroporto a
-join arrpart ap1 on ap1.arrivo = a.codice 
-join arrpart ap2 on ap2.partenza = a.codice
-join luogoaeroporto la on a.codice = la.aeroporto
-where ap1 <> ap2
-group by la.nazione
-
-aeroporto di arrivo deve essere diverso da quello di partenza
-i voli devono essere diversi tra di loro 
+select la1.nazione, count(distinct(la2.nazione)) as raggiungibili 
+from arrpart ap
+join luogoaeroporto la1 on la1.nazione = ap.partenza 
+join luogoaeroporto la2 on la2.nazione = ap.arrivo 
+where la1.nazione <> la2.nazione
+group by la1.nazione  
 
 --7. Qual è la durata media dei voli che partono da ognuno degli aeroporti?
 select a.codice, a.nome, avg(v.durataminuti) as media_durata
 from volo v, arrpart ap, aeroporto a
 where ap.partenza = a.codice and ap.codice = v.codice and ap.comp = v.comp
 group by a.codice
-
 
 select a.codice, a.nome, avg(v.durataminuti) as media_durata
 from aeroporto a

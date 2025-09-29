@@ -55,3 +55,14 @@ alter table ArrPart add
 foreign key (codice, comp) references Volo(codice, comp) deferrable;
 
 commit;
+
+
+-- domanda 6 
+select la1.nazione, count(distinct la2.nazione) as raggiungibili
+from aeroporto a
+join luogoaeroporto la1 on a.codice = la1.aeroporto 
+join luogoaeroporto la2 on a.codice = la2.aeroporto 
+join arrpart ap1 on la1.aeroporto = ap1.partenza
+join arrpart ap2 on la2.aeroporto = ap2.arrivo
+where la1.nazione <> la2.nazione
+group by la1.nazione
