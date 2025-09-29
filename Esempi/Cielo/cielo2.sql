@@ -30,7 +30,7 @@ JOIN compagnia c ON c.nome = ap.comp
 GROUP BY a.codice
 
 --6. Quante sono le nazioni (diverse) raggiungibili da ogni nazione tramite uno o più voli?
-select la1.nazione, count(distinct(la2.nazione)) as raggiungibili 
+select la1.nazione, count(distinct la2.nazione) as raggiungibili 
 from arrpart ap
 join luogoaeroporto la1 on la1.aeroporto = ap.partenza 
 join luogoaeroporto la2 on la2.aeroporto = ap.arrivo 
