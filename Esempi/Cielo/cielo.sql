@@ -64,5 +64,5 @@ join luogoaeroporto la1 on a.codice = la1.aeroporto
 join luogoaeroporto la2 on a.codice = la2.aeroporto 
 join arrpart ap1 on la1.aeroporto = ap1.partenza
 join arrpart ap2 on la2.aeroporto = ap2.arrivo
-where la1.nazione <> la2.nazione
+where la1.aeroporto <> la2.aeroporto
 group by la1.nazione

@@ -18,15 +18,15 @@ where ap.comp = 'Apitalia'
 group by la.nazione
 
 --4. Qual è la media, il massimo e il minimo della durata dei voli effettuati dalla compagnia ‘MagicFly’?
-select avg(v.durataminuti) as media, min(v.durataminuti) as minimo, max(v.durataminuti) as massimo
+select round(avg(v.durataminuti)::numeric, 2) as media, min(v.durataminuti) as minimo, max(v.durataminuti) as massimo
 from volo v 
 where v.comp = 'MagicFly'
 
 --5. Qual è l’anno di fondazione della compagnia più vecchia che opera in ognuno degli aeroporti?
-SELECT a.codice, a.nome, MIN(c.annoFondaz) as anno
+SELECT a.codice, a.nome, min(c.annoFondaz) as anno
 FROM aeroporto a
-JOIN arrpart ap ON a.codice = ap.arrivo OR a.codice = ap.partenza
-JOIN compagnia c ON c.nome = ap.comp
+JOIN arrpart ap on a.codice = ap.arrivo or a.codice = ap.partenza
+JOIN compagnia c on c.nome = ap.comp
 GROUP BY a.codice
 
 --6. Quante sono le nazioni (diverse) raggiungibili da ogni nazione tramite uno o più voli?
@@ -64,22 +64,19 @@ group by a.codice, a.nome
 having count(distinct ap.comp) = 2
 
 --10. Quali sono le città con almeno due aeroporti?
-select la.citta
-from luogoaeroporto la
-join aeroporto a on la.aeroporto = a.codice
-group by la.citta
-having count(distinct la.aeroporto) >= 2
+select citta
+from luogoaeroporto 
+group by citta
+having count(aeroporto) >= 2
 
 --11. Qual è il nome delle compagnie i cui voli hanno una durata media maggiore di 6 ore?
-select c.nome as compagnia
-from compagnia c
-join volo v on c.nome = v.comp 
-group by c.nome 
+select comp as compagnia
+from volo
+group by comp
 having avg(v.durataminuti) > 360
 
 --12. Qual è il nome delle compagnie i cui voli hanno tutti una durata maggiore di 100 minuti?
-select c.nome as compagnia
-from compagnia c
-join volo v on c.nome = v.comp
-group by c.nome
+select comp as compagnia
+from volo
+group by comp
 having min(v.durataminuti) > 100
