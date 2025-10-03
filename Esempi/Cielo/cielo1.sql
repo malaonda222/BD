@@ -38,11 +38,9 @@ where partenza = 'FCO' and arrivo = 'JFK'
 
 
 /*7. Quali sono i nomi delle compagnie che hanno voli diretti dalla città di ‘Roma’ alla città di ‘New York’?*/
-select distinct comp
-from arrpart a 
-	join luogoaeroporto l1 on a.partenza = l1.aeroporto
-	join luogoaeroporto l2 on a.arrivo = l2.aeroporto 
-where l1.citta = 'Roma' and l2.citta = 'New York'
+select distinct comp 
+from arrpart a, luogoaeroporto la1, luogoaeroporto la2 
+where a.partenza = la1.aeroporto and a.arrivo = la2.aeroporto and la1.citta = 'Roma' and la2.citta = 'New York'
 
 
 /*8. Quali sono gli aeroporti (con codice IATA, nome e luogo) nei quali partono voli della compagnia di nome ‘MagicFly’?*/
@@ -62,6 +60,18 @@ where l1.citta = 'Roma' and l2.citta = 'New York'
 
 
 /*10. Quali sono i possibili piani di volo con esattamente un cambio (utilizzando solo voli della stessa compagnia da un qualunque aeroporto della città di ‘Roma’ ad un qualunque aeroporto della città di ‘New York’? Restituire: nome della compagnia, codici dei voli e aeroporti di partenza, scalo e arrivo.*/
+
+
+
+
+
+
+
+
+
+
+
+
 select ar1.comp, ar1.codice, l1.aeroporto, l2.aeroporto, l3.aeroporto
 from arrpart ar1
 	join luogoaeroporto l1 on ar1.partenza = l1.aeroporto

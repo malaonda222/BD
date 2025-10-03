@@ -49,3 +49,6 @@ select distinct giorno,
 from attivitanonprogettuale
 where tipo = 'Didattica' 
 order by giorno asc 
+
+
+
