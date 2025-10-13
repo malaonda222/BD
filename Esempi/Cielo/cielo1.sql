@@ -60,18 +60,6 @@ where l1.citta = 'Roma' and l2.citta = 'New York'
 
 
 /*10. Quali sono i possibili piani di volo con esattamente un cambio (utilizzando solo voli della stessa compagnia da un qualunque aeroporto della città di ‘Roma’ ad un qualunque aeroporto della città di ‘New York’? Restituire: nome della compagnia, codici dei voli e aeroporti di partenza, scalo e arrivo.*/
-
-
-
-
-
-
-
-
-
-
-
-
 select ar1.comp, ar1.codice, l1.aeroporto, l2.aeroporto, l3.aeroporto
 from arrpart ar1
 	join luogoaeroporto l1 on ar1.partenza = l1.aeroporto
@@ -79,8 +67,16 @@ from arrpart ar1
     join arrpart ar2 on ar1.arrivo = ar2.partenza
 	join luogoaeroporto l3 on ar2.arrivo = l3.aeroporto
 where l1.citta = 'Roma' and l3.citta = 'New York'
-	and l1.citta <> l3.citta
 	and ar1.comp = ar2.comp
+
+
+select ap1.comp, ap1.codice as codice_volo_1, ap1.partenza as partenza, ap1.arrivo as scalo, ap2.codice as codice_volo_2, ap2.arrivo as arrivo
+from arrpart ap1, arrpart ap2, luogoaeroporto la1, luogoaeroporto la2
+where ap1.arrivo = ap2.partenza
+and ap1.partenza = la1.aeroporto 
+and ap2.arrivo = la2.aeroporto
+and la1.citta = 'Roma' and la2.citta = 'New York'
+and ap1.comp = ap2.comp 
 
 
 /*11. Quali sono le compagnie che hanno voli che partono dall’aeroporto ‘FCO’, atterrano all’aeroporto ‘JFK' e di cui si conosce l’anno di fondazione?*/

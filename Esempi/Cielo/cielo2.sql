@@ -82,6 +82,22 @@ group by comp
 having min(v.durataminuti) > 100
 
 
+-- TROVARE GLI AEROPORTI DAI QUALI NON PARTE NESSUN VOLO
+select a.codice, a.nome 
+from aeroporto a 
+where a.codice not in (select distinct partenza 
+                        from arrpart)
+
+
+select a.codice, a.nome 
+from aeroporto 
+where a.codice not in (select arrivo 
+                        from arrpart )
+
+
+
+
+
 
 
 -- TROVARE GLI AEROPORTI DAI QUALI NON PARTE NESSUN VOLO
