@@ -25,7 +25,6 @@ create table Persona(
     stipendio Denaro not null
 );
 
-
 create table Progetto(
     id PosInteger not null,
     nome StringaM not null,
