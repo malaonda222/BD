@@ -2,6 +2,7 @@
 
 /*1. Quali sono il nome, la data di inizio e la data di fine dei WP del progetto di
 nome ‘Pegasus’?*/
+
 select wp.id, wp.nome, wp.inizio, wp.fine
 from progetto, wp
 where progetto.nome = 'Pegasus'
@@ -9,19 +10,20 @@ and wp.progetto = progetto.id
 
 -- oppure 
 select wp.nome, wp.inizio, wp.fine 
-from wp, progetto 
+from wp, progetto p
 where wp.progetto = p.id 
 and p.nome = 'Pegasus'
 
 
 /*2. Quali sono il nome, il cognome e la posizione degli strutturati che hanno almeno una 
 attività nel progetto ‘Pegasus’, ordinati per cognome decrescente?*/
+
 select distinct p.nome, p.cognome, p.posizione
-from persona p
-join attivitaprogetto ap on p.id = ap.persona
-join progetto pr on ap.progetto = pr.id
-where pr.nome = 'Pegasus'
-order by p.cognome desc
+from persona p, attivitaprogetto ap, progetto pr 
+where ap.persona = p.id 
+and ap.progetto = pr.id 
+and pr.nome = 'Pegasus'
+order by p.cognome desc 
 
 -- oppure 
 select distinct p.id, p.nome, p.cognome, p.posizione
@@ -34,6 +36,14 @@ order by p.cognome desc
 
 /*3. Quali sono il nome, il cognome e la posizione degli strutturati che hanno più di 
 una attività nel progetto ‘Pegasus’?*/
+
+select p.id, p.nome, p.cognome, p.posizione
+from persona p, attivitaprogetto ap, progetto pr 
+where ap.persona = p.id and ap.progetto = pr.id and pr.nome = 'Pegasus'
+group by p.id, p.nome, p.cognome, p.posizione 
+having count (p.nome) > 1 
+
+
 select p.nome, p.cognome, p.posizione
 from persona p
 join attivitaprogetto ap on p.id = ap.persona

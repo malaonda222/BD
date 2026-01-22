@@ -73,7 +73,7 @@ having count(aeroporto) >= 2
 select comp as compagnia
 from volo
 group by comp
-having avg(v.durataminuti) > 360
+having avg(durataminuti) > 360
 
 --12. Qual è il nome delle compagnie i cui voli hanno tutti una durata maggiore di 100 minuti?
 select comp as compagnia
@@ -83,6 +83,7 @@ having min(v.durataminuti) > 100
 
 
 -- TROVARE GLI AEROPORTI DAI QUALI NON PARTE NESSUN VOLO
+
 select a.codice, a.nome 
 from aeroporto a 
 where a.codice not in (select distinct partenza 
